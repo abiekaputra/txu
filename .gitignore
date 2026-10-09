@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.secrets/
+artifacts/
+.idea/
+.vscode/
+backend/.gradle/
+backend/build/
+coverage/
+node_modules/
+playwright-report/
+test-results/
+web/dist/
+web/node_modules/

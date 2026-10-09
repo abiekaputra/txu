@@ -1,0 +1,65 @@
+services:
+  database:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-txu}
+      POSTGRES_USER: ${POSTGRES_USER:-txu}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-txu-local}
+    ports:
+      - '5437:5432'
+    volumes:
+      - txu-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-txu} -d ${POSTGRES_DB:-txu}',
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: demo
+      DATABASE_URL: jdbc:postgresql://database:5432/${POSTGRES_DB:-txu}
+      DATABASE_USER: ${POSTGRES_USER:-txu}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-txu-local}
+      PUBLIC_BASE_URL: http://localhost:3001
+      TXU_SIGNING_KEY_ID: ${TXU_SIGNING_KEY_ID:-local-2026-01}
+      TXU_SIGNING_PRIVATE_KEY_PATH: /run/txu/private-key.der
+      TXU_SIGNING_PUBLIC_KEY_PATH: /run/txu/public-key.der
+      TXU_REPORT_FINGERPRINT_SALT: ${TXU_REPORT_FINGERPRINT_SALT:-local-demo-fingerprint-salt}
+    volumes:
+      - ./.secrets:/run/txu:ro
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'wget',
+          '-q',
+          '-O',
+          '-',
+          'http://localhost:8080/actuator/health/readiness',
+        ]
+      interval: 8s
+      timeout: 3s
+      retries: 15
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    ports:
+      - '3001:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  txu-data:

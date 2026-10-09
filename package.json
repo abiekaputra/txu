@@ -1,0 +1,31 @@
+{
+  "name": "txu",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first platform for issuing and verifying signed appreciation receipts.",
+  "license": "MIT",
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=24.0.0 <25",
+    "pnpm": ">=11.0.0 <12"
+  },
+  "scripts": {
+    "backend:build": "./backend/gradlew -p backend build",
+    "backend:format": "./backend/gradlew -p backend ktlintFormat",
+    "backend:quality": "./backend/gradlew -p backend ktlintCheck test bootJar",
+    "check:files": "node scripts/check-file-lengths.mjs",
+    "dev:api": "./backend/gradlew -p backend bootRun",
+    "dev:web": "pnpm --dir web dev",
+    "format": "prettier --write . && pnpm backend:format",
+    "format:check": "prettier --check . && ./backend/gradlew -p backend ktlintCheck",
+    "install:web": "pnpm --dir web install --frozen-lockfile",
+    "lint": "pnpm --dir web lint",
+    "quality": "pnpm check:files && pnpm format:check && pnpm lint && pnpm --dir web typecheck && pnpm --dir web test && pnpm --dir web build && pnpm backend:quality",
+    "test:e2e": "playwright test",
+    "test:integration": "./backend/gradlew -p backend integrationTest"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "prettier": "3.9.9"
+  }
+}

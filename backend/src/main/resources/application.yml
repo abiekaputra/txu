@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: txu-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5437/txu}
+    username: ${DATABASE_USER:txu}
+    password: ${DATABASE_PASSWORD:txu-local}
+  flyway:
+    enabled: true
+  session:
+    jdbc:
+      initialize-schema: always
+    timeout: 30m
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /docs
+
+txu:
+  public-base-url: ${PUBLIC_BASE_URL:http://localhost:3001}
+  signing:
+    key-id: ${TXU_SIGNING_KEY_ID:local-2026-01}
+    private-key-path: ${TXU_SIGNING_PRIVATE_KEY_PATH:}
+    public-key-path: ${TXU_SIGNING_PUBLIC_KEY_PATH:}
+    allow-ephemeral: ${TXU_SIGNING_ALLOW_EPHEMERAL:false}
+  report-fingerprint-salt: ${TXU_REPORT_FINGERPRINT_SALT:local-demo-fingerprint-salt}

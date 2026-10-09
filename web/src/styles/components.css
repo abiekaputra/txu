@@ -1,0 +1,229 @@
+.status {
+  min-height: 30px;
+  padding: 5px 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.status--neutral {
+  color: #514a46;
+  background: #ebe6e0;
+}
+.status--success {
+  color: var(--green);
+  background: #e0f0e2;
+  border-color: #c0ddc5;
+}
+.status--warning {
+  color: var(--gold);
+  background: #fff0c9;
+  border-color: #ead491;
+}
+.status--danger {
+  color: var(--danger);
+  background: #fbe1dc;
+  border-color: #ecc0b7;
+}
+.notice {
+  min-height: 48px;
+  margin: 16px 0;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 14px;
+  line-height: 1.45;
+}
+.notice--info {
+  color: #31526a;
+  background: #e9f1f5;
+}
+.notice--success {
+  color: var(--green);
+  background: #e0f0e2;
+}
+.notice--danger {
+  color: var(--danger);
+  background: #fbe1dc;
+}
+.loading {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+}
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--line);
+  border-top-color: var(--coral);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.receipt-paper {
+  min-height: 550px;
+  padding: 44px;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 28px 80px rgba(48, 37, 30, 0.12);
+}
+.receipt-paper::before {
+  content: '';
+  width: 8px;
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--coral);
+}
+.receipt-paper::after {
+  content: 'TXU';
+  position: absolute;
+  right: -14px;
+  bottom: -32px;
+  color: rgba(238, 101, 79, 0.06);
+  font:
+    800 9rem Manrope,
+    sans-serif;
+}
+.paper-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.paper-header img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+.paper-for {
+  margin: 70px 0 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.receipt-paper h2 {
+  margin-bottom: 38px;
+  font-size: 2.4rem;
+}
+.receipt-paper h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+}
+.receipt-paper blockquote {
+  margin: 0 0 46px;
+  padding: 0;
+  color: #4f4844;
+  font:
+    500 1.05rem/1.7 'DM Sans',
+    sans-serif;
+}
+.paper-meta {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px 18px;
+  font-size: 0.8rem;
+}
+.paper-meta span {
+  color: var(--muted);
+}
+.paper-foot {
+  margin: 32px 0 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.form-actions,
+.moderation-actions {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.modal-backdrop {
+  padding: 24px;
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(30, 27, 26, 0.58);
+  backdrop-filter: blur(7px);
+}
+.modal {
+  width: min(540px, 100%);
+  max-height: 90vh;
+  padding: 32px;
+  overflow-y: auto;
+}
+.modal h2 {
+  font-size: 2rem;
+}
+.modal a {
+  color: var(--coral-dark);
+  font-weight: 700;
+}
+
+.link-box {
+  margin: 18px auto;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 18px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+.link-box.private {
+  border-color: #dcae58;
+  background: #fffaf0;
+}
+.link-box div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.link-box div span {
+  padding: 3px 7px;
+  color: var(--gold);
+  background: #fff0c9;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+.link-box code {
+  grid-column: 1;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.link-box button {
+  grid-area: 1 / 2 / 3;
+  align-self: center;
+  color: white;
+  background: var(--ink);
+}

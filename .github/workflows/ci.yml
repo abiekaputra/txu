@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  product-quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: txu
+          POSTGRES_USER: txu
+          POSTGRES_PASSWORD: txu-local
+        ports:
+          - 5437:5432
+        options: >-
+          --health-cmd "pg_isready -U txu -d txu"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+    env:
+      DATABASE_URL: jdbc:postgresql://127.0.0.1:5437/txu
+      DATABASE_USER: txu
+      DATABASE_PASSWORD: txu-local
+      PUBLIC_BASE_URL: http://127.0.0.1:3001
+      SPRING_PROFILES_ACTIVE: demo
+      TXU_SIGNING_ALLOW_EPHEMERAL: 'true'
+      TXU_REPORT_FINGERPRINT_SALT: ci-fingerprint-salt
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: pnpm
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.1.2
+      - run: pnpm install --frozen-lockfile
+      - name: Formatting, static checks, unit tests, and builds
+        run: pnpm quality
+      - name: PostgreSQL product integration
+        run: pnpm test:integration
+      - name: Dependency audit
+        run: pnpm audit --audit-level high
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Start local product
+        run: |
+          ./backend/gradlew -p backend bootRun > /tmp/txu-api.log 2>&1 &
+          pnpm --dir web dev --host 127.0.0.1 > /tmp/txu-web.log 2>&1 &
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:8080/actuator/health/readiness >/dev/null && \
+               curl --fail --silent http://127.0.0.1:3001 >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/txu-api.log
+          cat /tmp/txu-web.log
+          exit 1
+      - name: Browser product validation
+        run: pnpm test:e2e
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: txu-browser-evidence
+          path: |
+            artifacts/screenshots/*.jpg
+            playwright-report/
+          if-no-files-found: warn
+          retention-days: 30

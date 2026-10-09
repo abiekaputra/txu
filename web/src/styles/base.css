@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+:root {
+  color: #1e1b1a;
+  background: #f6f1e9;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-synthesis: none;
+  --ink: #1e1b1a;
+  --muted: #6c6460;
+  --paper: #fffdfa;
+  --line: #ded6cc;
+  --coral: #ee654f;
+  --coral-dark: #c94331;
+  --sage: #dce8db;
+  --green: #246244;
+  --gold: #87651e;
+  --danger: #a7352b;
+  --shadow: 0 22px 70px rgba(58, 44, 35, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1,
+h2,
+h3 {
+  font-family: 'Manrope', system-ui, sans-serif;
+  letter-spacing: -0.035em;
+}
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4.75rem);
+  line-height: 1.02;
+}
+h2 {
+  line-height: 1.12;
+}
+p {
+  line-height: 1.65;
+}
+main {
+  min-height: calc(100vh - 152px);
+}
+footer {
+  padding: 30px 5vw;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.site-header {
+  height: 76px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(30, 27, 26, 0.1);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font:
+    800 1.25rem Manrope,
+    sans-serif;
+  letter-spacing: -0.04em;
+}
+.brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.page-section {
+  width: min(1180px, 90vw);
+  margin: 0 auto;
+  padding: 70px 0;
+}
+.eyebrow {
+  margin-bottom: 13px;
+  color: var(--coral-dark);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.lede {
+  color: var(--muted);
+  font-size: 1.12rem;
+  max-width: 650px;
+}
+.card {
+  background: rgba(255, 253, 250, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 46px;
+}
+.section-heading h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+}
+.section-heading p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+label small {
+  justify-self: end;
+  color: var(--muted);
+  font-weight: 400;
+}
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 13px 15px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid #cfc6bc;
+  border-radius: 12px;
+  outline: none;
+  transition: 160ms ease;
+}
+textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 4px rgba(238, 101, 79, 0.13);
+}
+button,
+.button-link {
+  min-height: 42px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 160ms ease;
+}
+button:hover,
+.button-link:hover {
+  transform: translateY(-1px);
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(238, 101, 79, 0.35);
+  outline-offset: 3px;
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+  transform: none;
+}
+.primary {
+  color: white;
+  background: var(--ink);
+  box-shadow: 0 8px 24px rgba(30, 27, 26, 0.16);
+}
+.primary:hover {
+  background: #38302d;
+}
+.secondary {
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.danger-button {
+  color: white;
+  background: var(--danger);
+}
+.small {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.82rem;
+}
+.wide {
+  width: 100%;
+  margin-top: 10px;
+}
+.text-button,
+.back {
+  min-height: auto;
+  padding: 4px;
+  color: var(--muted);
+  background: transparent;
+  border-radius: 4px;
+}
+.back {
+  margin-bottom: 28px;
+}
+.user-chip {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
