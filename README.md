@@ -43,6 +43,7 @@ notarization, or legally binding electronic signatures.
 - Health endpoints, correlation IDs, structured errors, and domain metrics
 - Responsive React interface with intentional product states
 - PostgreSQL integration and full browser journey tests
+- Automated WCAG 2 A/AA checks and a repeatable public-verification p95 gate
 
 ## Product evidence
 

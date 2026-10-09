@@ -71,7 +71,7 @@
   border-left: 1px solid var(--line);
 }
 .story-grid b {
-  color: var(--coral);
+  color: var(--coral-dark);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
 }
@@ -163,7 +163,7 @@
   display: grid;
   place-items: center;
   color: white;
-  background: var(--coral);
+  background: var(--coral-dark);
   border-radius: 30% 70% 56% 44%;
   font:
     800 1rem Manrope,

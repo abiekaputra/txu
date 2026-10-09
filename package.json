@@ -25,6 +25,7 @@
     "test:integration": "./backend/gradlew -p backend integrationTest"
   },
   "devDependencies": {
+    "@axe-core/playwright": "catalog:",
     "@playwright/test": "1.64.0",
     "prettier": "3.9.9"
   }

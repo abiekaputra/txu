@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { mkdir } from 'node:fs/promises';
 
 const evidence = 'artifacts/screenshots';
@@ -13,6 +14,31 @@ async function capture(page: Page, name: string) {
   });
 }
 
+async function expectAccessible(page: Page) {
+  const result = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa'])
+    .analyze();
+  const material = result.violations.filter((item) =>
+    ['serious', 'critical'].includes(item.impact ?? ''),
+  );
+  expect(material, JSON.stringify(material, null, 2)).toEqual([]);
+}
+
+async function verifyLocalPerformance(page: Page, publicUrl: string) {
+  const publicId = new URL(publicUrl).pathname.split('/').at(-1);
+  const durations: number[] = [];
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    const started = performance.now();
+    const response = await page.request.get(`/api/public/receipts/${publicId}`);
+    expect(response.ok()).toBe(true);
+    durations.push(performance.now() - started);
+  }
+  durations.sort((left, right) => left - right);
+  const p95 = durations[Math.ceil(durations.length * 0.95) - 1];
+  console.log(`Local public verification p95: ${p95.toFixed(1)} ms`);
+  expect(p95).toBeLessThan(500);
+}
+
 async function register(page: Page) {
   await page.goto('/');
   await page.getByLabel('Display name').fill('Abi Eka');
@@ -22,6 +48,7 @@ async function register(page: Page) {
   await expect(
     page.getByRole('heading', { name: 'Appreciation worth keeping.' }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '01-member-dashboard-empty');
 }
 
@@ -37,16 +64,19 @@ async function issueReceipt(page: Page) {
     .fill(
       'Your calm decisions and precise reviews kept everyone moving when the release changed at the last minute.',
     );
+  await expectAccessible(page);
   await capture(page, '02-receipt-composer');
   await page.getByRole('button', { name: 'Preview receipt' }).click();
   await expect(
     page.getByRole('heading', { name: 'These words become permanent.' }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '03-immutable-preview');
   await page.getByRole('button', { name: 'Confirm and issue' }).click();
   await expect(
     page.getByRole('heading', { name: /verifiable history/i }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '04-issued-links');
   const links = await page.locator('.link-box code').allTextContents();
   return { publicUrl: links[0], recipientUrl: links[1] };
@@ -59,6 +89,7 @@ async function acknowledge(browser: Browser, recipientUrl: string) {
   await expect(
     page.getByRole('heading', { name: /Acknowledge the contribution/i }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '06-recipient-acknowledgement');
   await page.getByRole('button', { name: 'Acknowledge receipt' }).click();
   await expect(page.getByText(/Acknowledgement recorded/i)).toBeVisible();
@@ -86,7 +117,7 @@ async function moderate(browser: Browser, publicUrl: string) {
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto('/');
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('tab', { name: 'Sign in' }).click();
   await page.getByLabel('Email').fill('moderator@txu.local');
   await page.getByLabel('Password').fill('local-txu-moderator');
   await page.getByRole('button', { name: 'Open my receipts' }).click();
@@ -94,6 +125,7 @@ async function moderate(browser: Browser, publicUrl: string) {
   await expect(
     page.getByRole('heading', { name: 'Moderation queue' }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '09-moderation-queue');
   await page.locator('.report-row').first().click();
   await page.getByRole('button', { name: 'Hide receipt' }).click();
@@ -101,7 +133,11 @@ async function moderate(browser: Browser, publicUrl: string) {
   await expect(page.getByText('HIDDEN')).toBeVisible();
   await capture(page, '10-hidden-public-state');
   await page.goto('/moderation');
-  await page.locator('.report-row').first().click();
+  await page
+    .locator('.report-row')
+    .filter({ hasText: 'RESOLVED' })
+    .first()
+    .click();
   await page.getByRole('button', { name: 'Restore receipt' }).click();
   await context.close();
 }
@@ -113,6 +149,8 @@ test('complete TXU product journey', async ({ page, browser }) => {
   await expect(
     page.getByText('Cryptographic signature verified'),
   ).toBeVisible();
+  await expectAccessible(page);
+  await verifyLocalPerformance(page, links.publicUrl);
   await capture(page, '05-public-verification');
   await acknowledge(browser, links.recipientUrl);
   await reportReceipt(browser, links.publicUrl);
@@ -143,6 +181,7 @@ test('mobile landing remains usable', async ({ browser }) => {
   await expect(
     page.getByRole('heading', { name: /Make your thank-you last/i }),
   ).toBeVisible();
+  await expectAccessible(page);
   await capture(page, '13-mobile-landing');
   await context.close();
 });

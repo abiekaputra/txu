@@ -62,12 +62,18 @@ export function AuthPanel({
         <div className="auth-card card">
           <div className="tabs" role="tablist">
             <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'register'}
               className={mode === 'register' ? 'active' : ''}
               onClick={() => setMode('register')}
             >
               Create account
             </button>
             <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'login'}
               className={mode === 'login' ? 'active' : ''}
               onClick={() => setMode('login')}
             >

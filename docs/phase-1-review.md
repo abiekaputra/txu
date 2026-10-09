@@ -1,5 +1,8 @@
 # Phase 1 Review
 
+> Historical planning record. The implementation described as future work here
+> is complete; current evidence and commands live in the root README.
+
 ## Outcome
 
 Phase 1 is complete. TXU now has a bounded product definition and an architecture
@@ -54,11 +57,11 @@ that can be implemented without reopening foundational product questions.
 - [x] Security boundaries and secret-handling rules are explicit.
 - [x] P0 exclusions protect the low-effort delivery target.
 - [x] Local-only release status is explicit.
-- [ ] Current supported dependency versions are verified.
-- [ ] Repository and CI foundation are created.
-- [ ] Initial application skeletons compile and test.
+- [x] Current supported dependency versions are verified.
+- [x] Repository and CI foundation are created.
+- [x] Initial application skeletons compile and test.
 
-The remaining unchecked items are Phase 2 work.
+All Phase 2 entry items were completed before the product implementation.
 
 ## Phase 2 objective
 
