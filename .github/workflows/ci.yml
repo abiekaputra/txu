@@ -40,13 +40,13 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.1.2
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: pnpm
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 11.1.2
       - run: pnpm install --frozen-lockfile
       - name: Formatting, static checks, unit tests, and builds
         run: pnpm quality
